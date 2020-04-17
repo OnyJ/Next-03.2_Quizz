@@ -1,12 +1,39 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="stylesheets/style.css" />
     <title>Quizz</title>
+
+    <!-- Style -->
+    <link rel=stylesheet
+    href=https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css
+    integrity=sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm
+    crossorigin=anonymous>
+    <link rel="stylesheet" href="stylesheets/style.css" />
   </head>
+
   <body>
-    <h1>Quizz</h1>
+    <section id="firstPart">
+      <center>
+        <h1>Quizz</h1>
+        <form id="questionAmountForm">
+          <div class="col-lg-1 my-1">
+            <label class="mr-sm-2" for="">Questions</label>
+            <select class="custom-select mr-sm-2" id="questionsAmount">
+              <option selected>10</option>
+              <option value="15">15</option>
+              <option value="20">20</option>
+              <option value="25">25</option>
+              <option value="30">30</option>
+            </select>
+          </div>
+          <input type="submit" value="Play" />
+        </form>
+      </center>
+    </section>
+
+    <section id="secondPart"></section>
+
     <script src="javascript/index.js"></script>
   </body>
 </html>
