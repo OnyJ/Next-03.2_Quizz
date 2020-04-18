@@ -2,6 +2,7 @@ const URL = "https://opentdb.com/api.php?amount=";
 const QUESTION_CARD = document.getElementById("questionCard");
 let score = 0;
 let countRounds = 0;
+let rounds = null;
 
 choseQuestionsAmount = (e) => {
   let amount = document.getElementById("questionsAmount");
@@ -19,43 +20,53 @@ startGame = (url) => {
     .then((response) => response.json())
     .then((response) => {
       countRounds = 0;
+      rounds = response.results;
       console.log(response);
-      QUESTION_CARD.innerHTML = "";
-      if (countRounds < response.results.length) showQuestion(response.results);
-    });
+      if (countRounds < rounds.length) showQuestion();
+      console.log("je suis ici");
+    })
+    .catch((error) => console.error(error));
 };
 
-const compareResponse = (correct, choice, rounds) => {
+let compareResponse = (correct, choice) => {
+  console.log("je suis ici 2");
   console.log("compare !");
   if (correct == choice) score += 1;
   if (choice != "") {
     countRounds += 1;
-    showQuestion(rounds);
+    showQuestion();
     return;
   }
   return false;
 };
 
-showQuestion = (rounds) => {
-  let round = rounds[countRounds];
+showQuestion = () => {
+  QUESTION_CARD.innerHTML = "";
+  const round = rounds[countRounds];
+  console.log("round");
+  console.log(round);
+  console.log(">>>>>>>>>>>>>>>>>>>>>");
+  console.log(rounds);
 
   console.log("bug1");
+
   QUESTION_CARD.innerHTML = `
-  <div class="card" style="width: 18rem;">
-    <div class="card-body">
-      <h1 class="card-title">${round.category}</h1>
-      <h2 class="card-subtitle mb-2 text-muted">${round.question}</h2>
-      <p>${round.difficulty}</p>
-      <div>${showButtons(rounds)}</div>
+    <div class="card" style="width: 18rem;">
+      <div class="card-body">
+        <h1 class="card-title">${round.category}</h1>
+        <h2 class="card-subtitle mb-2 text-muted">${round.question}</h2>
+        <p>${round.difficulty}</p>
+        <div>${showButtons()}</div>
       </div>
       ${console.log("marche?")}
-  </div>
+    </div>
   `;
   console.log(QUESTION_CARD);
-  console.log("bug1");
+
+  console.log("bug1 end");
 };
 
-showButtons = (rounds) => {
+showButtons = () => {
   let round = rounds[countRounds];
   let buttonsDisplay = ``;
   let correct = round.correct_answer;
@@ -66,8 +77,8 @@ showButtons = (rounds) => {
     console.log("bug2");
 
     buttonsDisplay = `
-      <input id="choice1" type="button" onclick="compareResponse(${correct}, "True", ${rounds}) value="True">
-      <input id="choice2" type="button" onclick="compareResponse(${correct}, "False", ${rounds}) value="False">
+      <input id="choice1" type="button" onclick="compareResponse('${correct}', 'True')" value="True">
+      <input id="choice2" type="button" onclick="compareResponse('${correct}', 'False')" value="False">
     `;
     console.log("bug2");
   }
@@ -80,9 +91,6 @@ showButtons = (rounds) => {
       choicesArray.push(answer);
     });
 
-    console.log("answers not mixed : ");
-    console.log(choicesArray);
-
     mixArray(choicesArray);
 
     console.log("answers mixed : ");
@@ -90,12 +98,39 @@ showButtons = (rounds) => {
 
     console.log("bug3");
 
+    // buttonsDisplay = `
+    // <input id="choice1" type="button" onclick="${compareResponse(
+    // correct,
+    // choicesArray[0],
+    // rounds
+    // )}" value="${choicesArray[0]}">
+    // <input id="choice2" type="button" onclick="${compareResponse(
+    // correct,
+    // choicesArray[1],
+    // rounds
+    // )}" value="${choicesArray[1]}">
+    // <input id="choice3" type="button" onclick="${compareResponse(
+    // correct,
+    // choicesArray[2],
+    // rounds
+    // )}" value="${choicesArray[2]}">
+    // <input id="choice4" type="button" onclick="${compareResponse(
+    // correct,
+    // choicesArray[3],
+    // rounds
+    // )}" value="${choicesArray[3]}">
+    // `;
+
+    console.log("correct : ");
+    console.log(correct);
+
     buttonsDisplay = `
-      <input id="choice1" type="button" onclick="compareResponse(${correct}, ${choicesArray[0]}, ${rounds})" value="${choicesArray[0]}">
-      <input id="choice2" type="button" onclick="compareResponse(${correct}, ${choicesArray[1]}, ${rounds})" value="${choicesArray[1]}">
-      <input id="choice3" type="button" onclick="compareResponse(${correct}, ${choicesArray[2]}, ${rounds})" value="${choicesArray[2]}">
-      <input id="choice4" type="button" onclick="compareResponse(${correct}, ${choicesArray[3]}, ${rounds})" value="${choicesArray[3]}">
-    `;
+      <input id="choice1" type="button" onclick="compareResponse('${correct}', '${choicesArray[0]}')" value="${choicesArray[0]}">
+      <input id="choice2" type="button" onclick="compareResponse('${correct}', '${choicesArray[1]}')" value="${choicesArray[1]}">
+      <input id="choice3" type="button" onclick="compareResponse('${correct}', '${choicesArray[2]}')" value="${choicesArray[2]}">
+      <input id="choice4" type="button" onclick="compareResponse('${correct}', '${choicesArray[3]}')" value="${choicesArray[3]}">
+      `;
+    // <input id="choice1" type="button" onclick="compareResponse(${correct}, ${choicesArray[0]}, ${rounds})" value="${choicesArray[0]}"></input>
     console.log("bug3");
   }
   return buttonsDisplay;
